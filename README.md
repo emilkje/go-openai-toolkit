@@ -93,7 +93,7 @@ Of course, this is just the beginning. I hope to add more features and built-in 
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+This project is intentionally built with a minimal set of dependencies, but it relies heavily on the following pieces of tech:
 
 * [![Go][Go]][Go-url]
 * [sashabaranov/go-openai][go-openai-url]
@@ -105,11 +105,11 @@ This section should list any major frameworks/libraries used to bootstrap your p
 <!-- GETTING STARTED -->
 ## Getting Started
 
-To get started with the Go OpenAI Toolkit, you will need to install the go language. You can find the installation instructions [here](https://golang.org/doc/install).
+To get started with the Go OpenAI Toolkit, you will need to install the go language. You can find the installation instructions [here](https://go.dev/doc/install).
 
 ### Prerequisites
 
-This project requires no no prerequisites other than the Go language itself.
+This project requires no external prerequisites other than the Go language itself.
 
 ### Installation
 
@@ -119,7 +119,7 @@ This project requires no no prerequisites other than the Go language itself.
       go install github.com/emilkje/go-openai-toolkit/cmd/toolkit-tools-gen@latest
       ```
 
-2. Install the toolkit in your project
+2. Add the toolkit to your project
 
     ```sh
     go get -u github.com/emilkje/go-openai-toolkit
