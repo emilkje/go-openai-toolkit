@@ -55,15 +55,19 @@ lint-fix: golangci-lint ## Run golangci-lint linter and perform fixes
 ##@ Build
 
 .PHONY: build
-build: fmt vet ## Build manager binary.
-	go build -o bin/main main.go
+build: fmt vet ## Build the code generator.
+	go build -o bin/tools-gen-local ./cmd/toolkit-tools-gen/main.go
+
+.PHONY: build-example
+build-example: fmt vet ## Build the example app.
+	go build -o bin/example example/cmd/main.go
 
 .PHONY: run
-run: fmt vet ## Run a controller from your host.
-	go run main.go
+run: fmt vet ## Run the example app.
+	go run ./example/cmd/main.go
 
 .PHONY: generate
-generate: ## Generate code.
+generate: toolkit-tools-gen ## Generate code.
 	go generate ./...
 
 ##@ Pre Deployment
@@ -87,11 +91,13 @@ $(LOCALBIN):
 	mkdir -p $(LOCALBIN)
 
 ## Tool Binaries
+TOOLKIT_TOOLS_GEN = $(LOCALBIN)/toolkit-tools-gen-$(TOOLKIT_TOOLS_GEN_VERSION)
 GOLANGCI_LINT = $(LOCALBIN)/golangci-lint-$(GOLANGCI_LINT_VERSION)
 GOSEC = $(LOCALBIN)/gosec-$(GOSEC_VERSION)
 GOVULNCHECK = $(LOCALBIN)/govulncheck-$(GOVULNCHECK_VERSION)
 
 ## Tool Versions
+TOOLKIT_TOOLS_GEN_VERSION ?= latest
 GOLANGCI_LINT_VERSION ?= v1.54.2
 GOSEC_VERSION ?= latest
 GOVULNCHECK_VERSION ?= latest
@@ -111,6 +117,11 @@ $(GOSEC): $(LOCALBIN)
 govulncheck: $(GOVULNCHECK) ## Download golangci-lint locally if necessary.
 $(GOVULNCHECK): $(LOCALBIN)
 	$(call go-install-tool,$(GOVULNCHECK),golang.org/x/vuln/cmd/govulncheck,$(GOVULNCHECK_VERSION))
+
+.PHONY: toolkit-tools-gen
+toolkit-tools-gen: $(TOOLKIT_TOOLS_GEN) ## Download toolkit-tools-gen locally if necessary.
+$(TOOLKIT_TOOLS_GEN): $(LOCALBIN)
+	$(call go-install-tool,$(TOOLKIT_TOOLS_GEN),github.com/emilkje/go-openai-toolkit/cmd/toolkit-tools-gen,$(TOOLKIT_TOOLS_GEN_VERSION))
 
 # go-install-tool will 'go install' any package with custom target and name of binary, if it doesn't exist
 # $1 - target path with name of binary (ideally with version)
