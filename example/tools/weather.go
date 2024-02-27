@@ -9,7 +9,7 @@ type WeatherToolArgs struct {
 	Location string `json:"location" desc:"The location to get the weather for."`
 }
 
-// WeatherTool is a tool that greets a person
+// WeatherTool is a tool that reports the current weather for a location
 // +tool:name=weather_tool
 // +tool:description=WeatherTool reports the current weather for a location
 type WeatherTool struct {
