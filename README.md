@@ -281,7 +281,7 @@ This would have been much harder to create without the following projects:
 [issues-url]: https://github.com/emilkje/go-openai-toolkit/issues
 [license-shield]: https://img.shields.io/github/license/emilkje/go-openai-toolkit.svg?style=for-the-badge
 [license-url]: https://github.com/emilkje/go-openai-toolkit/blob/master/LICENSE.txt
-[product-screenshot]: docs/assets/screenshot.png
+[product-screenshot]: docs/assets/tool_example.png
 [Go]: https://img.shields.io/github/go-mod/go-version/emilkje/go-openai-toolkit?style=for-the-badge
 [Go-url]: https://go.dev/
 [go-openai-url]: https://github.com/sashabaranov/go-openai
