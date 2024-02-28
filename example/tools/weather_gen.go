@@ -15,12 +15,16 @@ func (w *WeatherTool) Definition() openai.FunctionDefinition {
 		Parameters: jsonschema.Definition{
 			Type: jsonschema.Object,
 			Properties: map[string]jsonschema.Definition{
-				"location": {
-					Type:        jsonschema.String,
-					Description: "The location to get the weather for.",
+				"latitude": {
+					Type:        jsonschema.Number,
+					Description: "The latitude of the location.",
+				},
+				"longitude": {
+					Type:        jsonschema.Number,
+					Description: "The longitude of the location.",
 				},
 			},
-			Required: []string{"location"},
+			Required: []string{"latitude", "longitude"},
 		},
 	}
 }

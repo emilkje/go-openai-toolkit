@@ -64,6 +64,10 @@ build-example: fmt vet ## Build the example app.
 
 .PHONY: run
 run: fmt vet ## Run the example app.
+	go run ./cmd/toolkit-tools-gen/main.go -path ./example/tools
+
+.PHONY: run-example
+run-example: fmt vet check-google-api-key ## Run the example app.
 	go run ./example/cmd/main.go
 
 .PHONY: generate
@@ -84,6 +88,13 @@ dependency-scan: govulncheck ## Run dependency scan on the codebase.
 
 
 ##@ Dependencies
+
+.PHONY: check-google-api-key
+check-google-api-key:
+	@if [ -z "$$GOOGLE_API_KEY" ]; then \
+		echo "Error: GOOGLE_API_KEY is not set"; \
+		exit 1; \
+	fi
 
 ## Location to install dependencies to
 LOCALBIN ?= $(shell pwd)/bin

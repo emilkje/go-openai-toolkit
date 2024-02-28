@@ -77,15 +77,16 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://github.com/emilkje/go-openai-toolkit)
 
-The [sashabaranov/go-openai](https://github.com/sashabaranov/go-openai) project is a great starting point for creating your first OpenAI project. However, it lacks a lot of the tools and features that are necessary to get started with a proper agent.
+The [sashabaranov/go-openai](https://github.com/sashabaranov/go-openai) library is a great starting point for creating your first OpenAI project. However, it lacks a lot of the tools and features that are necessary to get started with a proper agent.
 
 This project aims to provide a toolkit for developers to get started with creating their own OpenAI assistants powered by their own custom tools. The toolkit includes a variety of features such as:
 
-* Code Generator: Create dead simple tool structs and let the code generator generate the OpenAI function specs
-* Runtime: A runtime that will handle the conversation loop and call the appropriate tools
-* go-openai integration: A simple integration with the go-openai library we all know and love
+* **Code Generator**: Create dead simple tool structs and let the code generator generate the OpenAI function specs
+* **Runtime**: A runtime that will handle the conversation loop and call the appropriate tools
+* **go-openai integration**: Compatible with messages from go-openai library
 
 Of course, this is just the beginning. I hope to add more features and built-in tools to the toolkit as time goes on.
+See <a href="#roadmap">the roadmap</a> for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -179,7 +180,7 @@ This project requires no external prerequisites other than the Go language itsel
     package main
     
     import (
-        "github.com/emilkje/go-openai-toolkit/runtime"
+        toolkit_runtime "github.com/emilkje/go-openai-toolkit/runtime"
         "github.com/emilkje/go-openai-toolkit/toolkit"
         "github.com/emilkje/go-openai-toolkit/tools"
         "github.com/sashabaranov/go-openai"
@@ -195,7 +196,7 @@ This project requires no external prerequisites other than the Go language itsel
         client := openai.NewClientWithConfig(newConfigFromEnv())
    
         // Initialize the runtime with the client and toolkit
-        rt := runtime.NewRuntime(client, tk)
+        runtime := toolkit_runtime.NewRuntime(client, tk)
     
         messages := []openai.ChatCompletionMessage{
             {
@@ -209,15 +210,17 @@ This project requires no external prerequisites other than the Go language itsel
         }
     
         // The runtime handles the conversation and tool-calling loop
-        chatLog, err := rt.ProcessChat(messages)
+        chatLog, err := runtime.ProcessChat(messages)
     }
     ```
 
+   > **Note**: To see a full example, check out the [example](./example) directory.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 <!-- ROADMAP -->
+<a name="roadmap"></a>
 ## Roadmap
 
 - [x] Create a basic toolkit

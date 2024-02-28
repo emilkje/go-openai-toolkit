@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/emilkje/go-openai-toolkit/runtime"
+	toolkit_runtime "github.com/emilkje/go-openai-toolkit/runtime"
 	"github.com/emilkje/go-openai-toolkit/toolkit"
 	"github.com/sashabaranov/go-openai"
 
@@ -15,38 +15,50 @@ import (
 // this would normally be  //go:generate toolkit-tools-gen -path ./tools
 
 func main() {
+	// Create a new toolkit to hold the tools
 	tk := toolkit.NewToolkit()
-	tk.RegisterTool(tools.NewWeatherTool())
 
+	// Register the tools
+	tk.RegisterTool(
+		tools.NewGeocodeTool(),
+		tools.NewWeatherTool(),
+	)
+
+	// Create a new runtime
 	client := openai.NewClientWithConfig(newConfigFromEnv())
-	rt := runtime.NewRuntime(client, tk)
+	runtime := toolkit_runtime.NewRuntime(client, tk)
 
 	messages := []openai.ChatCompletionMessage{
 		{
 			Role:    openai.ChatMessageRoleSystem,
-			Content: "You are a helpful assistant",
+			Content: tk.DefaultSystemMessage(), // gives a brief description of the available tools
 		},
 		{
 			Role:    openai.ChatMessageRoleUser,
-			Content: "What is the weather in Oslo?",
+			Content: "How's the weather in Oslo? Please answer in a very brief sentence.",
 		},
 	}
 
-	chatLog, err := rt.ProcessChat(messages)
+	// Start the runtime to fulfill the user's request
+	chatLog, err := runtime.ProcessChat(messages)
 
 	if err != nil {
-		fmt.Println("error processing chat:", err)
+		fmt.Println("😵error processing chat:", err)
 		os.Exit(1)
 	}
 
 	for _, message := range chatLog {
-		if len(message.ToolCalls) > 0 {
-			for _, toolCall := range message.ToolCalls {
-				fmt.Println(getRoleIcon(message.Role)+" "+message.Role+": called tool: ", toolCall.Function.Name, toolCall.Function.Arguments)
-			}
-		} else {
-			fmt.Println(getRoleIcon(message.Role) + " " + message.Role + ": " + message.Content)
+		prettyPrintMessage(message)
+	}
+}
+
+func prettyPrintMessage(message openai.ChatCompletionMessage) {
+	if len(message.ToolCalls) > 0 {
+		for _, toolCall := range message.ToolCalls {
+			fmt.Println(getRoleIcon(message.Role)+" "+message.Role+": called tool: ", toolCall.Function.Name, toolCall.Function.Arguments)
 		}
+	} else {
+		fmt.Println(getRoleIcon(message.Role) + " " + message.Role + ": " + message.Content)
 	}
 }
 
